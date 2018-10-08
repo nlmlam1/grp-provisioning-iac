@@ -31,16 +31,16 @@ resource "azurerm_network_security_group" "grp" {
   }
 
   security_rule {
-    name                                       = "allow_remote_web"
-    description                                = "Foreman Web access - allow TCP 80,443"
-    protocol                                   = "Tcp"
-    source_port_range                          = "*"
-    destination_port_ranges                    = ["80", "443"]
-    source_address_prefix                      = "*"
-    destination_application_security_group_ids = ["${data.terraform_remote_state.ims.application_security_group_web}"]
-    access                                     = "Allow"
-    priority                                   = "102"
-    direction                                  = "Inbound"
+    name                       = "allow_remote_web"
+    description                = "Web access - allow TCP 80,443"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_address_prefix = "*"
+    destination_port_ranges    = ["80", "443"]
+    source_address_prefix      = "*"
+    access                     = "Allow"
+    priority                   = "102"
+    direction                  = "Inbound"
   }
 
   tags = "${merge(
