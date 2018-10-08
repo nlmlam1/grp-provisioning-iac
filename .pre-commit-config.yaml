@@ -1,0 +1,6 @@
+repos:
+- repo: git://github.com/marclambrichs/pre-commit-scripts.git
+  sha: v0.1
+  hooks:
+    - id: jira-fmt
+      stages: [commit-msg]
