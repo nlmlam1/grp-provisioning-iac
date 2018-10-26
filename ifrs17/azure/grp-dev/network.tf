@@ -1,5 +1,5 @@
 ##################################################
-# subnet for management
+# subnet for GRP
 ##################################################
 resource "azurerm_subnet" "subnet1" {
   name                      = "${local.prefix}-grp"

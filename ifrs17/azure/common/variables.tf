@@ -10,6 +10,10 @@ variable "common_tags" {
   }
 }
 
+variable "costcenter" {
+  default = ""
+}
+
 variable "environment" {
   default = "poc"
 }
@@ -26,6 +30,15 @@ variable "storage_account_name" {
 # Local(s)
 ##################################################
 locals {
-  costcenter = "${coalesce(upper(var.costcenter), "ITS")}"
-  prefix     = "${var.environment}-${var.location}"
+  costcenter           = "${coalesce(upper(var.costcenter), "GRP")}"
+  prefix               = "${var.environment}-${var.location}"
+  puppet_bootstrap_url = "${data.terraform_remote_state.ims.puppet_script}"
+
+  tags = "${merge(
+    var.common_tags,
+    map(
+      "Costcenter", "${local.costcenter}",
+      "Environment", "${var.environment}"
+    )
+  )}"
 }

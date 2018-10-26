@@ -20,11 +20,5 @@ resource "azurerm_resource_group" "grp" {
   name     = "${local.prefix}-${var.subnet_name}-rg"
   location = "${var.location}"
 
-  tags = "${merge(
-    var.common_tags,
-    map(
-      "Costcenter", "${local.costcenter}",
-      "Environment", "${var.environment}"
-    )
-  )}"
+  tags = "${local.tags}"
 }
