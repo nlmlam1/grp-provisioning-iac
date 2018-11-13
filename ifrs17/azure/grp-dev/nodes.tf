@@ -51,7 +51,7 @@ module nginx {
 
   tags           = "${local.tags}"
   vm_hostname    = "${var.subnet_name}-website"
-  vm_size        = "Standard_B1s"
+  vm_size        = "Standard_B1ms"
   vnet_subnet_id = "${azurerm_subnet.subnet1.id}"
 }
 
@@ -99,40 +99,6 @@ module puppet_cs_k8s_controller {
   location            = "${var.location}"
   resource_group_name = "${azurerm_resource_group.grp.name}"
   virtual_machines    = ["${module.k8s_controller.virtual_machine_names}"]
-  urls                = ["${local.puppet_bootstrap_url}"]
-  puppetmaster_ip     = "${element(data.terraform_remote_state.ims.puppetmaster_ip,0)}"
-  tags                = "${local.tags}"
-}
-
-##################################################
-# Virtual Machine etcd
-##################################################
-module etcd {
-  source   = "git@github.com:AtradiusGroup/terraform-azure-compute?ref=IT-59-bootstrap-puppetmaster-in-the-cloud"
-  location = "${var.location}"
-
-  nr_of_instances      = 0
-  nr_of_public_ip      = 0
-  resource_group_name  = "${azurerm_resource_group.grp.name}"
-  ssh_key              = "~/.ssh/id_rsa_atradius.pub"
-  storage_account_type = "Standard_LRS"
-
-  application_security_group_ids = [
-    "${data.terraform_remote_state.ims.application_security_group_web}",
-  ]
-
-  tags           = "${local.tags}"
-  vm_hostname    = "${var.subnet_name}-database"
-  vm_size        = "Standard_B1s"
-  vnet_subnet_id = "${azurerm_subnet.subnet1.id}"
-}
-
-module puppet_cs_etcd {
-  source              = "../modules/puppet_cs"
-  name                = "puppet_etcd"
-  location            = "${var.location}"
-  resource_group_name = "${azurerm_resource_group.grp.name}"
-  virtual_machines    = ["${module.etcd.virtual_machine_names}"]
   urls                = ["${local.puppet_bootstrap_url}"]
   puppetmaster_ip     = "${element(data.terraform_remote_state.ims.puppetmaster_ip,0)}"
   tags                = "${local.tags}"
