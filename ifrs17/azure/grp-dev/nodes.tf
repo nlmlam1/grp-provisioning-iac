@@ -66,6 +66,13 @@ module puppet_cs_nginx {
   tags                = "${local.tags}"
 }
 
+module dns_nginx {
+  source     = "../modules/dns_records"
+  names      = ["proxy", "nifi"]
+  addresses  = "${module.nginx.network_interface_private_ip}"
+  key_secret = "roOkgU5VnFpz/A79oDD+FGMjotb1Q4sEhxUnWp2uUAo="
+}
+
 ##################################################
 # Virtual Machines kubernetes cluster
 ##################################################
