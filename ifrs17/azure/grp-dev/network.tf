@@ -31,23 +31,30 @@ resource "azurerm_network_security_group" "grp" {
   }
 
   security_rule {
-    name                       = "allow_remote_web"
-    description                = "Web access - allow TCP 80,443"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_address_prefix = "*"
-    destination_port_ranges    = ["80", "443"]
-    source_address_prefix      = "*"
-    access                     = "Allow"
-    priority                   = "102"
-    direction                  = "Inbound"
+    name                                       = "allow_remote_web"
+    description                                = "Web access - allow TCP 80,443"
+    protocol                                   = "Tcp"
+    source_port_range                          = "*"
+    destination_port_ranges                    = ["80", "443"]
+    source_address_prefix                      = "*"
+    destination_application_security_group_ids = ["${data.terraform_remote_state.base.application_security_groups.web}"]
+    access                                     = "Allow"
+    priority                                   = "102"
+    direction                                  = "Inbound"
   }
 
-  tags = "${merge(
-    var.common_tags,
-    map(
-      "Costcenter", "${local.costcenter}",
-      "Environment", "${var.environment}"
-    )
-  )}"
+  security_rule {
+    name                                       = "allow_remote_postgresql"
+    description                                = "Web access - allow TCP 5432"
+    protocol                                   = "Tcp"
+    source_port_range                          = "*"
+    destination_port_range                     = "5432"
+    source_address_prefix                      = "*"
+    destination_application_security_group_ids = ["${data.terraform_remote_state.base.application_security_groups.postgresql}"]
+    access                                     = "Allow"
+    priority                                   = "103"
+    direction                                  = "Inbound"
+  }
+
+  tags = "${local.tags}"
 }

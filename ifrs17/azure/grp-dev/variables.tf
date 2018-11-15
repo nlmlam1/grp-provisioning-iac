@@ -25,6 +25,18 @@ variable "subnet_name" {
   default = "grp"
 }
 
+variable "key_name" {
+  default = "grp."
+}
+
+variable "key_secret" {
+  default = "gqFDwj7fE1shrtVzxm2o34ju9zz7Q9WBDboq5LrsqcI="
+}
+
+variable "zone" {
+  default = "grp.azure.atradiusnet.com."
+}
+
 ##################################################
 # Local(s)
 ##################################################
